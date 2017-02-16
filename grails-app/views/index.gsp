@@ -3,15 +3,6 @@
 <head>
     <meta name="layout" content="site"/>
     <title>StravaVR</title>
-
-    <asset:javascript src="home.js" />
-                 
-    <script type="text/javascript">
-        function load() {
-            window.location.href = "/Water/#login";
-        }
-    </script>
-
 </head>
 
 <body>
