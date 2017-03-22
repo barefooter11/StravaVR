@@ -1,53 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="site"/>
-    <title>StravaVR</title>
+    <title>${activity.getName()}</title>
 
+    <asset:javascript src="jquery-2.2.0.min.js"/>
     <asset:javascript src="viewActivity.js"/>
+    <script src="https://aframe.io/releases/0.5.0/aframe.min.js" ></script>
+
 </head>
 
 <body>
 
-<div class="container">
-    <h2>${activity.name}</h2>
-    <hr>
+<a-scene>
 
-    <canvas id="glCanvas" width="900" height="600">
-        Your browser doesn't appear to support the
-        <code>&lt;canvas&gt;</code> element.
-    </canvas>
+    <g:each var="point" in="${points}">
+        <a-box id="${point['distance']}" color="${point['speedColor']}" position="${point['x']} ${point['y']} ${point['z']}" scale="0.01 0.01 0.01"></a-box>
+    </g:each>
 
-</div>
+    <a-text value="${activity.getName()}" color="#BBB" position="-0.9 1 -20" scale="3 3 3"></a-text>
 
-<script id="2d-vertex-shader" type="notjs">
-
-      // an attribute will receive data from a buffer
-      attribute vec4 a_position;
-
-      // all shaders have a main function
-      void main() {
-
-        // gl_Position is a special variable a vertex shader
-        // is responsible for setting
-        gl_Position = a_position;
-      }
-
-</script>
-
-<script id="2d-fragment-shader" type="notjs">
-
-      // fragment shaders don't have a default precision so we need
-      // to pick one. mediump is a good default
-      precision mediump float;
-
-      void main() {
-        // gl_FragColor is a special variable a fragment shader
-        // is responsible for setting
-        gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
-      }
-
-</script>
+</a-scene>
 
 </body>
 </html>
