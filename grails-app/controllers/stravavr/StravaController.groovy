@@ -73,7 +73,7 @@ class StravaController {
 
             def point = [:]
 
-            double lat = latlng.get(0) * -1
+            double lat = latlng.get(0)
             double lon = latlng.get(1)
 
             point['x'] = lon
@@ -113,8 +113,11 @@ class StravaController {
 
         def latDiff = maxLat - minLat
         def lonDiff = (maxLon - minLon) * lonAdjustment
-        def metersAcross = lonDiff * 111319.9
+        def aspectRatio = latDiff/lonDiff
+        def metersAcross = lonDiff * lonAdjustment * 111319.9
         def altitudeDiff = maxAltitude - minAltitude
+
+        def mapCenter = ["maLat "]
 
         def adjustedMaxLon = 10.0
         def adjustedMaxLat = adjustedMaxLon * latDiff / lonDiff
@@ -122,13 +125,14 @@ class StravaController {
 
         points.each { point ->
 
-            def adjustedLon = point['x'] - minLon
+            def adjustedLon = (point['x'] - minLon) * lonAdjustment
             def adjustedLat = point['z'] - minLat
             def adjustedAltitude = point['y'] - minAltitude
 
             adjustedLon = adjustedMaxLon * adjustedLon / lonDiff - (adjustedMaxLon / 2.0)
-            adjustedLat = adjustedMaxLat * adjustedLat / latDiff - (adjustedMaxLat + 2)
-            adjustedAltitude = adjustedMaxAltitude * adjustedAltitude / altitudeDiff - adjustedMaxAltitude
+            adjustedLat = adjustedMaxLat * adjustedLat / latDiff - (adjustedMaxLat / 2.0)
+            adjustedLat *= -1
+            adjustedAltitude = adjustedMaxAltitude * adjustedAltitude / altitudeDiff
 
             point['x'] = adjustedLon
             point['z'] = adjustedLat
@@ -152,7 +156,7 @@ class StravaController {
 
         printf("Meters Across: " + metersAcross + "\n")
 
-        [activity:activity, points:points]
+        [activity:activity, points:points, aspectRatio:aspectRatio]
 
     }
 
